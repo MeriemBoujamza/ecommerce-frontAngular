@@ -49,10 +49,24 @@
         <div
           class="card-header product-img position-relative overflow-hidden bg-transparent border p-0"
         >
+         <span *ngIf="p.promotion">
+                <img src="assets/img/hot.png" class="img-thumbnail img-circle"  style="   width: 60px;
+    height: 60px;
+    position: absolute;
+    border-radius: 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    right: 0;
+    bottom: 0;
+    border-bottom-left-radius: 10px;
+    padding: 10px;">
+              </span>
           <img
             class="img-fluid w-100"
             src="{{ this.catService.host + '/photoProduct/' + p.id+'?ts='+ getTS() }}"
             alt=""
+            (click)="onProductDetails(p)"
           />
         </div>
         <div
@@ -61,20 +75,29 @@
           <h6 class="text-truncate mb-3">{{ p.name }}</h6>
           <div class="d-flex justify-content-center">
             <h6>{{ p.price }} DH</h6>
+           
             <!-- <h6 class="text-muted ml-2"><del>$123.00</del></h6> -->
           </div>
         </div>
         <div class="card-footer d-flex justify-content-between bg-light border">
-          <a href="" class="btn btn-sm text-dark p-0"
+          <a  (click)="onProductDetails(p)" class="btn btn-sm text-dark p-0"
             ><i class="fas fa-eye text-primary mr-1"></i>View Detail</a
           >
-          <a (click)="onEditPhoto(p)" class="btn btn-sm text-dark p-0"
+
+          <a  *ngIf="authService.isAdmin()" (click)="onEditPhoto(p)" class="btn btn-sm text-dark p-0"
             ><i class="fas fa-arrow-up text-primary mr-1"></i>Upload pic</a
           >
-          <a href="" class="btn btn-sm text-dark p-0"
-            ><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To
-            Cart</a
-          >
+          
+          <form #f="ngForm" (ngSubmit)="onAddProductToCaddy(p)">
+            
+            <button type="submit" class="btn btn-sm text-dark p-0"
+            ><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</button>
+            <input type="number" name="quantity" [(ngModel)]="p.quantity" ngModel style="width: 40px; margin-left: 4px;">
+          </form>
+
+
+
+
         </div>
         <div
           *ngIf="editPhoto && currentProduct == p"

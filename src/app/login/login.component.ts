@@ -21,6 +21,7 @@ export class LoginComponent implements OnInit {
 
     if (this.authService.authenticated) {
       //  this.caddyService.loadCaddyFromLocalStorage();
+      this.authService.saveAuthenticatedUser();
       this.router.navigateByUrl('');
     }
   }

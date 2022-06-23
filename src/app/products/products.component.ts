@@ -2,6 +2,8 @@ import { CatalogueService } from './../catalogue.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
+import { AuthenticationService } from '../services/authentication.service';
+import { Product } from '../model/product.model';
 
 @Component({
   selector: 'app-products',
@@ -20,7 +22,8 @@ export class ProductsComponent implements OnInit {
   constructor(
     public catService: CatalogueService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    public authService: AuthenticationService
   ) {}
 
   ngOnInit(): void {
@@ -90,10 +93,22 @@ export class ProductsComponent implements OnInit {
     this.selectedFiles = undefined;
   }
 
-  getTS(){
+  getTS() {
     return Date.now();
   }
 
+  onAddProductToCaddy(p) {}
+
+  // onProductDetails(p:Product){
+
+  //   let url =  btoa(p._links.product.href);
+  //   this.router.navigateByUrl("/product/"+url);
+
+  // }
+
+  onProductDetails(p) {
+    this.router.navigateByUrl('/product/' + p.id);
+  }
   getProducts(url) {
     this.catService.getResource(url).subscribe(
       (data) => {

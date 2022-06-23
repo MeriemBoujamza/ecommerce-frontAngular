@@ -13,15 +13,15 @@ export class AuthenticationService {
   public host: string = 'https://localhost:8443';
   public authenticated: boolean;
   public authenticatedUser;
+  public token;
   constructor(private http: HttpClient) {}
-
-
 
   login(username: string, password: string) {
     let user;
     this.users.forEach((u) => {
       if (u.username === username && u.password === password) {
         user = u;
+        this.token = { username: u.username, roles: u.roles };
       }
     });
     if (user) {
@@ -35,5 +35,35 @@ export class AuthenticationService {
       this.authenticated = false;
       this.authenticatedUser = undefined;
     }
+  }
+
+  loadUser() {
+    let user = localStorage.getItem('authenticatedUser');
+    if (user) {
+      this.authenticatedUser = JSON.parse(user);
+      this.authenticated = true;
+    }
+  }
+
+  isAdmin() {
+    if (this.authenticatedUser) {
+      return this.authenticatedUser.roles.indexOf('ADMIN') > -1;
+    } else return false;
+  }
+
+  logout() {
+    this.authenticated = false;
+    this.authenticatedUser = undefined;
+    localStorage.removeItem('authenticatedUser');
+  }
+
+  public saveAuthenticatedUser() {
+    if (this.authenticatedUser) {
+      localStorage.setItem('authToken', JSON.stringify(this.token)); //u can add btao to encode  the string
+    }
+  }
+
+  isAuthenticated() {
+    return this.authenticated;
   }
 }

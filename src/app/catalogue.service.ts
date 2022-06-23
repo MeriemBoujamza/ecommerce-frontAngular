@@ -9,10 +9,13 @@ export class CatalogueService {
   public host: string = 'http://localhost:8080';
   constructor(private http: HttpClient) {}
 
-  public getResource(url: string) {
+  public getResource(url: string) { 
     return this.http.get(this.host + url);
   }
 
+  public getResource2(url) {
+    return this.http.get(url);
+  }
   uploadPhotoProduct(file: File, idProduct): Observable<HttpEvent<{}>> {
     let formdata: FormData = new FormData();
     formdata.append('file', file);
