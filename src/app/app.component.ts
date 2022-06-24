@@ -1,3 +1,4 @@
+import { CaddyService } from './services/caddy.service';
 import { CatalogueService } from './catalogue.service';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -15,7 +16,8 @@ export class AppComponent implements OnInit {
   constructor(
     private catService: CatalogueService,
     private router: Router,
-    public authService: AuthenticationService
+    public authService: AuthenticationService,
+    public caddyService: CaddyService
   ) {}
 
   ngOnInit(): void {
@@ -42,16 +44,24 @@ export class AppComponent implements OnInit {
     console.log(this.currentCategorie);
   }
 
-  getProductsByKeyword(keyword) {
+  getProductsByKeyword(data) {
     //TODO:use this for a search form
     this.currentCategorie = undefined;
-    this.router.navigateByUrl('/products/3/' + keyword);
+    console.log(data.keyword);
+    this.router.navigateByUrl('/products/3/' + data.keyword);
   }
 
   onLogin() {
     this.router.navigateByUrl('/login');
   }
+  goToCart() {
+    this.router.navigateByUrl('/caddy');
+  }
 
+  onUserManage(){
+    this.router.navigateByUrl('/users');
+
+  }
   onLogout() {
     //this.caddyService.emptyCaddy();
     this.authService.logout();

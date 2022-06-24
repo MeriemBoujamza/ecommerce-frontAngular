@@ -1,75 +1,169 @@
+<!-- Shop Detail Start -->
 
-    <!-- Shop Detail Start -->
-
-    <div class="container-fluid py-5" *ngIf="currentProduct && mode==0 " >
-        <div class="row px-xl-5">
-            <div class="col-lg-5 pb-5">
-                <div id="product-carousel" class="carousel slide" data-ride="carousel">
-                    <div class="carousel-inner border">
-                        <div class="carousel-item active">
-                            <img class="w-100 h-100" src="{{ this.catalService.host + '/photoProduct/' + currentProduct.id }}" alt="Image">
-                        </div>
-                   
-                    </div>
-                    <a class="carousel-control-prev" href="#product-carousel" data-slide="prev">
-                        <i class="fa fa-2x fa-angle-left text-dark"></i>
-                    </a>
-                    <a class="carousel-control-next" href="#product-carousel" data-slide="next">
-                        <i class="fa fa-2x fa-angle-right text-dark"></i>
-                    </a>
-                </div>
-            </div>
-
-            <div class="col-lg-7 pb-5">
-                <h3 class="font-weight-semi-bold">{{currentProduct.name}}</h3>
-                <div class="d-flex mb-3">
-                    <div class="text-primary mr-2">
-                        <small class="fas fa-star"></small>
-                        <small class="fas fa-star"></small>
-                        <small class="fas fa-star"></small>
-                        <small class="fas fa-star-half-alt"></small>
-                        <small class="far fa-star"></small>
-                    </div>
-                    <small class="pt-1">(50 Reviews)</small>
-                </div>
-                <h3 class="font-weight-semi-bold mb-4">{{currentProduct.price}} DH</h3>
-                <p class="mb-4">{{currentProduct.description}}</p>
-              
-            
-                <div class="d-flex align-items-center mb-4 pt-2">
-                    <form  #f="ngForm"  (ngSubmit)="onAddProductToCaddy(currentProduct)"  class="input-group quantity mr-3" style="width: 130px;">
-                     
-                        <input type="number" name="quantity" [(ngModel)]="currentProduct.quantity" class="form-control bg-secondary text-center" placeholder="1">
-                     
-                    </form>
-                    <button type="submit" class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart</button>   
-                    <button *ngIf="this.authService.isAdmin()" style="margin-left:10px ;" class="btn btn-primary px-3"><i class="fa fa-info-circle mr-1"></i> Edit Product info</button>
-                </div>
-                <div class="d-flex pt-2">
-                    <p class="text-dark font-weight-medium mb-0 mr-2">Share on:</p>
-                    <div class="d-inline-flex">
-                        <a class="text-dark px-2" href="">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                        <a class="text-dark px-2" href="">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a class="text-dark px-2" href="">
-                            <i class="fab fa-linkedin-in"></i>
-                        </a>
-                        <a class="text-dark px-2" href="">
-                            <i class="fab fa-pinterest"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
+<div class="container-fluid py-5" *ngIf="currentProduct">
+  <div class="row px-xl-5">
+    <div class="col-lg-5 pb-5">
+      <div id="product-carousel" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner border">
+          <div class="carousel-item active">
+            <img
+              class="w-100 h-100"
+              src="{{
+                this.catalService.host + '/photoProduct/' + currentProduct.id+'?ts='+ getTS()
+              }}"
+              alt="Image"
+            />
+          </div>
         </div>
-      
+        <a
+          class="carousel-control-prev"
+          href="#product-carousel"
+          data-slide="prev"
+        >
+          <i class="fa fa-2x fa-angle-left text-dark"></i>
+        </a>
+        <a
+          class="carousel-control-next"
+          href="#product-carousel"
+          data-slide="next"
+        >
+          <i class="fa fa-2x fa-angle-right text-dark"></i>
+        </a>
+      </div>
     </div>
-    <!-- Shop Detail End -->
 
+    <div class="col-lg-7 pb-5" *ngIf="mode == 0">
+      <h3 class="font-weight-semi-bold">{{ currentProduct.name }}</h3>
+      <div class="d-flex mb-3">
+        <div class="text-primary mr-2">
+          <small class="fas fa-star"></small>
+          <small class="fas fa-star"></small>
+          <small class="fas fa-star"></small>
+          <small class="fas fa-star-half-alt"></small>
+          <small class="far fa-star"></small>
+        </div>
+        <small class="pt-1">(50 Reviews)</small>
+      </div>
+      <h3 class="font-weight-semi-bold mb-4">{{ currentProduct.price }} DH</h3>
+      <p class="mb-4">{{ currentProduct.description }}</p>
 
-  
+      <div class="container-fluid">
+        <form
+          #f="ngForm"
+          (ngSubmit)="onAddProductToCaddy(currentProduct)"
+          class="quantity mr-3 form-inline"
+        >
+          <input
+            type="number"
+            name="quantity"
+            [(ngModel)]="currentProduct.quantity"
+            ngModel
+            class="form-control bg-secondary text-center"
+            placeholder="1"
+          />
+          <button type="submit" class="btn btn-primary px-3">
+            <i class="fa fa-shopping-cart mr-1"></i> Add To Cart
+          </button>
+          <button
+            *ngIf="this.authService.isAdmin()"
+            type="button"
+            (click)="onEditProduct()"
+            style="margin-left: 10px"
+            class="btn btn-primary px-3"
+          >
+            <i class="fa fa-info-circle mr-1"></i> Edit Product info
+          </button>
+        </form>
+      </div>
+      <div class="d-flex pt-2">
+        <p class="text-dark font-weight-medium mb-0 mr-2">Share on:</p>
+        <div class="d-inline-flex">
+          <a class="text-dark px-2" href="">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a class="text-dark px-2" href="">
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a class="text-dark px-2" href="">
+            <i class="fab fa-linkedin-in"></i>
+          </a>
+          <a class="text-dark px-2" href="">
+            <i class="fab fa-pinterest"></i>
+          </a>
+        </div>
+      </div>
+    </div>
 
-    <!-- Back to Top -->
-    <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+    <div class="col-lg-7 pb-5" *ngIf="mode == 1">
+      <form #f="ngForm" (ngSubmit)="onUpdateProduct(f.value)">
+        <div class="form-group">
+          <label class="control-label">Name:</label>
+          <input
+            type="text"
+            name="name"
+            ngModel
+            [(ngModel)]="currentProduct.name"
+            class="form-control"
+          />
+        </div>
+        <div class="form-group">
+          <label class="control-label">Description:</label>
+          <textarea
+            name="description"
+            ngModel
+            [(ngModel)]="currentProduct.description"
+            class="form-control"
+          ></textarea>
+        </div>
+        <div class="form-group">
+          <label class="control-label">Price:</label>
+          <input
+            type="text"
+            name="price"
+            ngModel
+            [(ngModel)]="currentProduct.price"
+            class="form-control"
+          />
+        </div>
+        <div class="form-group">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            name="promotion"
+            ngModel
+            [(ngModel)]="currentProduct.promotion"
+          />
+          <label class="control-label">put it on Promotion</label>
+        </div>
+        <div class="form-group">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            name="selected"
+            ngModel
+            [(ngModel)]="currentProduct.selected"
+          />
+          <label class="control-label">add to Selection</label>
+        </div>
+        <div class="form-group">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            name="available"
+            ngModel
+            [(ngModel)]="currentProduct.available"
+          />
+
+          <label class="control-label">make it Available</label>
+        </div>
+        <button class="btn btn-primary px-3" type="submit">Update</button>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- Shop Detail End -->
+
+<!-- Back to Top -->
+<a href="#" class="btn btn-primary back-to-top"
+  ><i class="fa fa-angle-double-up"></i
+></a>

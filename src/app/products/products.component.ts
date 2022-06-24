@@ -1,3 +1,4 @@
+import { CaddyService } from './../services/caddy.service';
 import { CatalogueService } from './../catalogue.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
@@ -23,7 +24,8 @@ export class ProductsComponent implements OnInit {
     public catService: CatalogueService,
     private route: ActivatedRoute,
     private router: Router,
-    public authService: AuthenticationService
+    public authService: AuthenticationService,
+    public caddyService:CaddyService
   ) {}
 
   ngOnInit(): void {
@@ -97,7 +99,13 @@ export class ProductsComponent implements OnInit {
     return Date.now();
   }
 
-  onAddProductToCaddy(p) {}
+  onAddProductToCaddy(p) {
+    if (!this.authService.isAuthenticated()) {
+      this.router.navigateByUrl('/login');
+    } else {
+      this.caddyService.addProduct(p);
+    }
+  }
 
   // onProductDetails(p:Product){
 

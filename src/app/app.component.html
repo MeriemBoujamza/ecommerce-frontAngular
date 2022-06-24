@@ -9,25 +9,23 @@
                 </a>
             </div>
             <div class="col-lg-6 col-6 text-left">
-                <form action="">
-                    <div class="input-group" (click)="getProductsByKeyword('test')"> 
-
-                        <!-- TODO:get the input field from form -->
-
-                        <input type="text" class="form-control" placeholder="Search for products">
-                        <div c class="input-group-append">
+             <form (ngSubmit)="getProductsByKeyword(form.value)" #form="ngForm">
+                    <div class="input-group" > 
+                            
+                        <input type="text"  name="keyword" class="form-control" ngModel placeholder="Search for products">
+                        <button type="submit" class="input-group-append">
                             <span class="input-group-text bg-transparent text-primary">
                                 <i  class="fa fa-search"></i>
                             </span>
-                        </div>
+                        </button>
                     </div>
                 </form>
             </div>
             <div class="col-lg-3 col-6 text-right">
         
-                <a href="" class="btn border">
+                <a (click)="goToCart()" class="btn border">
                     <i class="fas fa-shopping-cart text-primary"></i>
-                    <span class="badge">0</span>
+                    <span class="badge">{{caddyService.getSize()}}</span>
                 </a>
             </div>
         </div>
@@ -66,7 +64,7 @@
                         <div class="navbar-nav mr-auto py-0">
                             <a [routerLink]="['/products/1/0']" routerLinkActive="router-link-active"  class="nav-item nav-link active">Home</a>
   
-                            <a href="contact.html" class="nav-item nav-link">Contact</a>
+                            <a *ngIf="this.authService.isAdmin()" (click)="onUserManage()" class="nav-item nav-link">Manage Users</a>
                         </div>
                         <div class="navbar-nav ml-auto py-0">
                             <a *ngIf="this.authService.isAuthenticated()" (click)="onLogout()" class="nav-item nav-link">Logout</a>

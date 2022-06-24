@@ -1,20 +1,27 @@
+import { CatalogueService } from './../catalogue.service';
+import { CaddyService } from './caddy.service';
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AuthenticationService {
-  private users = [
-    { username: 'admin', password: '1234', roles: ['USER', 'ADMIN'] },
-    { username: 'user1', password: '1234', roles: ['USER'] },
-    { username: 'user2', password: '1234', roles: ['USER'] },
-  ];
+export class AuthenticationService  {
+  private users;
+  // = [
+  //   { username: 'admin', password: '1234', roles: ['USER', 'ADMIN'] },
+  //   { username: 'user1', password: '1234', roles: ['USER'] },
+  //   { username: 'user2', password: '1234', roles: ['USER'] },
+  // ];
+  public users2;
   public host: string = 'https://localhost:8443';
   public authenticated: boolean;
   public authenticatedUser;
   public token;
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private catService:CatalogueService) {
+    this.users=this.getUsers();
+  }
+ 
 
   login(username: string, password: string) {
     let user;
@@ -63,6 +70,17 @@ export class AuthenticationService {
     }
   }
 
+  public getUsers(){
+    this.catService.getResource('/users').subscribe(
+      (data) => {
+        this.users2 = data;
+        this.users = this.users2._embedded.users;
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
   isAuthenticated() {
     return this.authenticated;
   }

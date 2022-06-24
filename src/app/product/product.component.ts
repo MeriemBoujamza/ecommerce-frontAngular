@@ -3,6 +3,7 @@ import { AuthenticationService } from './../services/authentication.service';
 import { CatalogueService } from './../catalogue.service';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { CaddyService } from '../services/caddy.service';
 
 @Component({
   selector: 'app-product',
@@ -43,11 +44,34 @@ export class ProductComponent implements OnInit {
       );
   }
 
+  getTS() {
+    return Date.now();
+  }
+
   onAddProductToCaddy(p: Product) {
+    console.log(p);
     if (!this.authService.isAuthenticated()) {
       this.router.navigateByUrl('/login');
     } else {
       this.caddyService.addProduct(p);
+      console.log(this.caddyService.getSize())
     }
+  }
+
+  onEditProduct() {
+    this.mode = 1;
+  }
+
+  onUpdateProduct(data) {
+    let url = this.currentProduct._links.self.href;
+    this.catalService.patchResource(url, data).subscribe(
+      (d) => {
+        this.currentProduct = d;
+        this.mode = 0;
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 }
